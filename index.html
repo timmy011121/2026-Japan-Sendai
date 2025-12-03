@@ -1,0 +1,1436 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>2026日本東北之旅</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    
+    <!-- Babel Standalone for In-Browser JSX/TS Compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Styles -->
+    <style>
+      :root {
+        /* Liquid Glass Variables */
+        --glass-surface: rgba(255, 255, 255, 0.12);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --glass-highlight: rgba(255, 255, 255, 0.5);
+        --glass-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.6);
+        --text-primary: #ffffff;
+        --text-secondary: rgba(255, 255, 255, 0.65);
+        --accent-glow: rgba(56, 189, 248, 0.5);
+      }
+
+      html.light {
+        --glass-surface: rgba(255, 255, 255, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.5);
+        --glass-highlight: rgba(255, 255, 255, 0.9);
+        --glass-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.1);
+        --text-primary: #000000;
+        --text-secondary: #3c3c43;
+        --accent-glow: rgba(0, 122, 255, 0.3);
+      }
+
+      body {
+        background-color: #000000; /* Deep Black for Dark Mode */
+        color: var(--text-primary);
+        -webkit-tap-highlight-color: transparent;
+        /* Fonts: SF Pro -> Apple LiGothic -> Fallbacks */
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Apple LiGothic Medium", "LiGothic Med", "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif;
+        overflow-x: hidden;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+
+      html.light body {
+        background-color: #f2f2f7; /* Apple Light Gray */
+      }
+
+      /* --- Fluid Mesh Gradient Background --- */
+      .liquid-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.5;
+        animation: floatOrb 20s infinite ease-in-out alternate;
+        will-change: transform;
+      }
+
+      /* Dark Mode Orbs */
+      .dark .orb-1 { width: 60vh; height: 60vh; background: #1d4ed8; top: -10%; left: -10%; animation-duration: 25s; }
+      .dark .orb-2 { width: 50vh; height: 50vh; background: #be185d; bottom: -10%; right: -10%; animation-duration: 22s; animation-delay: -5s; }
+      .dark .orb-3 { width: 40vh; height: 40vh; background: #0e7490; top: 40%; left: 40%; animation-duration: 28s; animation-delay: -10s; }
+      .dark .orb-4 { width: 30vh; height: 30vh; background: #6d28d9; bottom: 20%; left: 10%; animation-duration: 30s; animation-delay: -2s; }
+
+      /* Light Mode Orbs */
+      .light .liquid-background { background-color: #f2f2f7; }
+      .light .orb-1 { width: 70vh; height: 70vh; background: #a5b4fc; top: -20%; left: -10%; opacity: 0.6; }
+      .light .orb-2 { width: 60vh; height: 60vh; background: #fbcfe8; bottom: -10%; right: -20%; opacity: 0.5; }
+      .light .orb-3 { width: 50vh; height: 50vh; background: #a5f3fc; top: 30%; right: 40%; opacity: 0.4; }
+
+      @keyframes floatOrb {
+        0% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0, 0) scale(1); }
+      }
+
+      /* --- Apple Liquid Glass Styles --- */
+      
+      .glass-panel {
+        background: var(--glass-surface);
+        /* Critical for the "liquid" look: High blur + Saturation boost */
+        backdrop-filter: blur(25px) saturate(180%); 
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: var(--glass-shadow);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      /* Optical Edge Highlight (The "Lip" of the glass) */
+      .glass-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        padding: 1px;
+        background: linear-gradient(
+          145deg, 
+          var(--glass-highlight) 0%, 
+          rgba(255,255,255,0.05) 40%, 
+          rgba(255,255,255,0) 100%
+        ); 
+        -webkit-mask: 
+           linear-gradient(#fff 0 0) content-box, 
+           linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      
+      /* Inner Depth Glow */
+      .glass-panel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.15);
+        border-radius: 24px;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .glass-button {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy spring */
+      }
+      
+      .glass-button:active {
+        transform: scale(0.94);
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Animations */
+      .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      @keyframes fadeIn {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      /* Utilities */
+      .text-glow {
+        text-shadow: 0 0 20px var(--accent-glow);
+      }
+      .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+    
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'Apple LiGothic Medium', 'LiGothic Med', 'sans-serif'],
+            },
+            colors: {
+              glass: {
+                primary: 'var(--text-primary)',
+                secondary: 'var(--text-secondary)',
+              }
+            },
+            animation: {
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
+          }
+        }
+      }
+    </script>
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <!-- Fluid Mesh Gradient -->
+    <div class="liquid-background">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+    </div>
+    <div id="root" class="relative z-10"></div>
+
+    <!-- Application Script -->
+    <script type="text/babel" data-presets="typescript,react" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import { GoogleGenAI } from "@google/genai";
+
+      // Mock process.env if not available
+      if (typeof process === 'undefined') {
+        window.process = { env: { API_KEY: '' } };
+      }
+
+      // --- TYPES ---
+      const ItemType = {
+        Transport: 'transport',
+        Spot: 'spot',
+        Food: 'food',
+        Hotel: 'hotel',
+        Flight: 'flight',
+      };
+
+      // --- DATA ---
+      const flights = [
+        {
+          date: '2026/01/13',
+          number: 'IT216',
+          route: 'TPE (T1) ➔ HND (T3)',
+          time: '00:10 - 04:00',
+          terminal: 'TPE T1 / HND T3',
+          airline: '台灣虎航',
+          baggage: '20KG'
+        },
+        {
+          date: '2026/01/24',
+          number: 'CI101',
+          route: 'NRT (T2) ➔ TPE (T2)',
+          time: '14:35 - 05:45 (+1)',
+          terminal: 'NRT T2 / TPE T2',
+          airline: '中華航空',
+          baggage: '20KG'
+        }
+      ];
+
+      const itineraryData = [
+        {
+          date: '2026/01/12',
+          dayLabel: 'Day 0',
+          city: '台北 ➔ 桃園機場',
+          weather: { temp: '18°C', condition: '陰有雨', icon: 'fa-cloud-rain', location: '台北' },
+          items: [
+            { time: '19:00', title: '台北車站機場線集合', type: ItemType.Transport, isImportant: true, note: '直達車每15分一班', duration: '約36分', price: 'NT$160' },
+            { time: '20:00', title: '桃園機場', type: ItemType.Transport, note: '抵達機場' },
+          ],
+          backupDining: []
+        },
+        {
+          date: '2026/01/13',
+          dayLabel: 'Day 1',
+          city: '東京 ➔ 仙台',
+          weather: { temp: '4°C', condition: '晴時多雲', icon: 'fa-cloud-sun', location: '仙台' },
+          items: [
+            { time: '04:00', title: '羽田空港', type: ItemType.Flight },
+            { time: '07:08', title: '京急空港線エアポート急行', type: ItemType.Transport, note: '羽田 ➔ 品川 (約21分), 品川 ➔ 東京 (約8分)', duration: '約40分', price: '¥510' },
+            { time: '08:18', title: '東北新幹線「はやぶさ」', type: ItemType.Transport, isImportant: true, note: '東京站 ➔ 仙台站, 20號月台', duration: '約1小時30分', price: '¥11,210' },
+            { time: '10:30', title: 'るーぷる仙台', type: ItemType.Transport, note: '觀光巴士一日券', price: '¥630' },
+            { time: '10:30', title: '仙台駅', type: ItemType.Spot, note: '寄放行李' },
+            { time: '11:00', title: '仙台朝市', type: ItemType.Spot, note: '新鮮海產' },
+            { time: 'Lunch', title: '牛たん炭焼 利久 仙台駅店', type: ItemType.Food, note: '推薦: 厚切牛舌定食', location: '牛たん炭焼 利久 仙台駅店' },
+            { time: '14:00', title: '瑞鳳殿', type: ItemType.Spot, location: '瑞鳳殿', note: '伊達政宗靈廟', price: '¥570' },
+            { time: '15:30', title: '仙台城跡', type: ItemType.Spot, location: '仙台城跡', note: '伊達政宗騎馬像、市景', price: '¥700' },
+            { time: '17:00', title: 'AER展望台', type: ItemType.Spot, location: 'AER展望台' },
+            { time: '19:00', title: '一番町商店街', type: ItemType.Spot },
+            { time: 'Dinner', title: '閣 仙台駅前店', type: ItemType.Food, note: '推薦: 生魚片、牡蠣料理', location: '閣 仙台駅前店' },
+            { time: 'Stay', title: 'ダイワロイネットホテル 仙台西口', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: 'たんや善治郎', note: '牛舌', type: 'lunch', category: '牛舌' },
+            { name: '味の牛たん 喜助', note: '牛舌', type: 'lunch', category: '牛舌' },
+            { name: '牛タン焼専門店 司', note: '牛舌', type: 'dinner', category: '牛舌' },
+            { name: '仙台味噌ラーメン', note: '味噌拉麵', type: 'dinner', category: '拉麵' },
+            { name: 'ずんだ茶寮', note: '毛豆奶昔', type: 'dessert', category: '甜點' },
+            { name: '鯛きち', note: '鯛魚燒', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/14',
+          dayLabel: 'Day 2',
+          city: '仙台 ➔ 松島 ➔ 銀山溫泉',
+          weather: { temp: '-1°C', condition: '大雪', icon: 'fa-snowflake', location: '銀山溫泉' },
+          items: [
+            { time: '09:00', title: 'Alamo Rent A Car', type: ItemType.Transport, isImportant: true, note: '取車 (4WD指定)' },
+            { time: '09:00', title: '開車前往松島', type: ItemType.Transport, duration: '約40分' },
+            { time: '09:40', title: '松島海岸', type: ItemType.Spot, location: '松島海岸', note: '日本三景' },
+            { time: '09:40', title: '松島遊覧船', type: ItemType.Spot, note: '09:00首班, 50分鐘航程', price: '¥1,500' },
+            { time: '11:00', title: '瑞巌寺', type: ItemType.Spot, location: '瑞巌寺', price: '¥700' },
+            { time: 'Lunch', title: '松島さかな市場', type: ItemType.Food, note: '海鮮丼、烤牡蠣', location: '松島さかな市場' },
+            { time: '14:20', title: '開車前往銀山溫泉', type: ItemType.Transport, duration: '約1小時40分' },
+            { time: '16:00', title: '古勢起屋専用駐車場', type: ItemType.Transport, note: '需打電話通知旅館接駁' },
+            { time: '16:30', title: '銀山温泉', type: ItemType.Spot, location: '銀山溫泉', note: '大正風情、能登屋旅館(神隱少女原型)' },
+            { time: '17:00', title: '白銀の滝', type: ItemType.Spot },
+            { time: 'Stay', title: '古勢起屋本館', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '松島牡蠣屋', note: '牡蠣料理', type: 'lunch', category: '海鮮' },
+            { name: '伊豆の華', note: '蕎麥麵', type: 'lunch', category: '麵食' },
+            { name: '西塚菓子舖', note: '溫泉饅頭', type: 'dessert', category: '伴手禮' }
+          ]
+        },
+        {
+          date: '2025/01/15',
+          dayLabel: 'Day 3',
+          city: '銀山 ➔ 山形 ➔ 上山',
+          weather: { temp: '-2°C', condition: '小雪', icon: 'fa-snowflake', location: '山形' },
+          items: [
+            { time: '09:45', title: '開車前往德良湖', type: ItemType.Transport, duration: '約15分' },
+            { time: '10:00', title: '徳良湖', type: ItemType.Spot, location: '德良湖' },
+            { time: '11:00', title: '開車前往山形', type: ItemType.Transport, duration: '約45分' },
+            { time: '10:00', title: '霞城公園', type: ItemType.Spot, location: '山形霞城公園', note: '冬季雪景' },
+            { time: 'Lunch', title: 'そば処明友庵', type: ItemType.Food, note: '手打蕎麥麵' },
+            { time: '15:30', title: '山形城跡', type: ItemType.Spot },
+            { time: '17:00', title: 'かみのやま温泉', type: ItemType.Spot, note: '上山城 夜間點燈' },
+            { time: 'Dinner', title: '庄司屋 本店', type: ItemType.Food, note: '蕎麥麵定食' },
+            { time: 'Stay', title: '山形グランドホテル', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '榮屋本店', note: '冷肉麵', type: 'lunch', category: '麵食' },
+            { name: '米沢牛 登起波', note: '米澤牛', type: 'lunch', category: '燒肉' },
+            { name: '榮玉堂', note: '紅花磅蛋糕', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2025/01/16',
+          dayLabel: 'Day 4',
+          city: '上山 ➔ 藏王',
+          weather: { temp: '-6°C', condition: '暴風雪', icon: 'fa-wind', location: '藏王' },
+          items: [
+            { time: '09:30', title: '開車前往藏王', type: ItemType.Transport, duration: '約30分' },
+            { time: '10:00', title: '蔵王ロープウェイ', type: ItemType.Spot, location: '藏王纜車', note: '地藏山頂站雪怪', isImportant: true, price: '¥4,400' },
+            { time: '12:00', title: '蔵王温泉大露天風呂', type: ItemType.Spot, note: '日本最大露天溫泉', price: '¥600' },
+            { time: 'Lunch', title: 'きくち食堂', type: ItemType.Food, note: '成吉思汗烤肉定食' },
+            { time: '13:30', title: '蔵王温泉スキー場', type: ItemType.Spot },
+            { time: '17:00', title: '蔵王温泉街', type: ItemType.Spot },
+            { time: 'Dinner', title: '仙台炭焼 牛たん東山', type: ItemType.Food, note: '極厚牛舌定食' },
+            { time: 'Stay', title: 'プチリゾートホテル デ・バート', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '三五郎小屋', note: '溫泉咖哩', type: 'lunch', category: '咖哩' },
+            { name: 'ZAO stand MY', note: '稻花餅', type: 'dessert', category: '和菓子' },
+            { name: 'CAFE SLOW JAM', note: '咖啡廳', type: 'dessert', category: '咖啡' }
+          ]
+        },
+        {
+          date: '2025/01/17',
+          dayLabel: 'Day 5',
+          city: '藏王 ➔ 狐狸村 ➔ 仙台',
+          weather: { temp: '-1°C', condition: '多雲', icon: 'fa-cloud', location: '仙台' },
+          items: [
+            { time: '09:00', title: '開車前往狐狸村', type: ItemType.Transport, duration: '約1小時30分' },
+            { time: '10:30', title: '宮城蔵王キツネ村', type: ItemType.Spot, location: '藏王狐狸村', note: '冬季狐狸互動', isImportant: true, price: '¥1,000' },
+            { time: '12:40', title: '開車前往金蛇水神社', type: ItemType.Transport, duration: '約50分' },
+            { time: '13:30', title: '金蛇水神社', type: ItemType.Spot, note: '黑色御守' },
+            { time: '14:10', title: '開車前往秋保大瀑布', type: ItemType.Transport, duration: '約50分' },
+            { time: '15:00', title: '秋保大滝', type: ItemType.Spot, note: '冬季結冰' },
+            { time: '17:10', title: '開車返回仙台', type: ItemType.Transport, duration: '約50分' },
+            { time: '18:00', title: '仙台站還車', type: ItemType.Transport },
+            { time: 'Dinner', title: 'すし波奈 仙台パルコ店', type: ItemType.Food, note: '東北壽司' },
+            { time: 'Stay', title: 'ホテルメトロポリタン仙台イースト', type: ItemType.Hotel }
+          ],
+          backupDining: [
+             { name: '伊達の牛たん本舗', note: '牛舌', type: 'dinner', category: '牛舌' },
+             { name: '松華堂菓子店', note: '蜂蜜蛋糕', type: 'dessert', category: '甜點' },
+             { name: '鯛きち', note: '鯛魚燒', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/18',
+          dayLabel: 'Day 6',
+          city: '仙台 ➔ 輕井澤',
+          weather: { temp: '-3°C', condition: '雪', icon: 'fa-snowflake', location: '輕井澤' },
+          items: [
+            { time: '11:00', title: 'せんだいメディアテーク', type: ItemType.Spot, note: '建築名作' },
+            { time: '14:31', title: '東北新幹線「はやぶさ」', type: ItemType.Transport, note: '仙台站 ➔ 東京站', duration: '約1小時13分', price: '¥11,410' },
+            { time: '18:04', title: '北陸新幹線「はくたか」', type: ItemType.Transport, note: '東京站 ➔ 輕井澤站', duration: '約1小時3分', price: '¥5,690' },
+            { time: 'Dinner', title: '村民食堂', type: ItemType.Food, note: '信州牛漢堡排' },
+            { time: 'Stay', title: 'アパホテル〈軽井沢駅前〉軽井沢荘', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '軽井沢当地レストラン', note: '當地料理', type: 'dinner', category: '當地料理' },
+            { name: 'Clinton St. Baking', note: '鬆餅/蛋糕', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/19',
+          dayLabel: 'Day 7',
+          city: '輕井澤',
+          weather: { temp: '-2°C', condition: '晴朗', icon: 'fa-sun', location: '輕井澤' },
+          items: [
+            { time: '09:00', title: '軽井沢プリンスホテルスキー場', type: ItemType.Spot, location: '輕井澤王子大飯店滑雪場', price: '¥10,000' },
+            { time: '13:00', title: '雲場池', type: ItemType.Spot, note: '冬季鏡湖雪景' },
+            { time: '14:00', title: '雪地徒步活動', type: ItemType.Spot },
+            { time: 'Dinner', title: '腸詰屋', type: ItemType.Food, note: '德式香腸、自家釀啤酒' },
+            { time: 'Stay', title: '軽井沢プリンスホテル ウエスト', type: ItemType.Hotel }
+          ],
+          backupDining: [
+             { name: '軽井沢焼肉', note: '燒肉', type: 'dinner', category: '燒肉' },
+             { name: '丸山珈琲', note: '精品咖啡', type: 'dessert', category: '咖啡' },
+             { name: 'SUKE6 DINER', note: '咖啡廳', type: 'dessert', category: '咖啡' }
+          ]
+        },
+        {
+          date: '2026/01/20',
+          dayLabel: 'Day 8',
+          city: '輕井澤',
+          weather: { temp: '-3°C', condition: '小雪', icon: 'fa-snowflake', location: '輕井澤' },
+          items: [
+            { time: '09:00', title: '赤倉温泉スキー場', type: ItemType.Spot, note: '不同路線滑雪', price: '¥10,000' },
+            { time: 'Dinner', title: '川上庵', type: ItemType.Food, note: '蕎麥麵' },
+            { time: 'Stay', title: '軽井沢プリンスホテル ウエスト', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: 'Bleston Court Yukawatan', note: '法式料理', type: 'dinner', category: '法式' }
+          ]
+        },
+        {
+          date: '2026/01/21',
+          dayLabel: 'Day 9',
+          city: '輕井澤 ➔ 東京淺草',
+          weather: { temp: '8°C', condition: '晴朗', icon: 'fa-sun', location: '東京' },
+          items: [
+            { time: '09:00', title: '旧軽井沢銀座通り', type: ItemType.Spot, note: '復古購物街' },
+            { time: '10:00', title: '聖パウロカトリック教会', type: ItemType.Spot },
+            { time: '10:00', title: '旧三笠ホテル', type: ItemType.Spot, note: '舊三笠飯店', price: '¥400' },
+            { time: '12:00', title: '軽井沢・プリンスショッピングプラザ', type: ItemType.Spot, note: 'Outlet 購物' },
+            { time: '16:23', title: '北陸新幹線', type: ItemType.Transport, isImportant: true, note: '輕井澤 ➔ 東京', duration: '約1小時5分', price: '¥6,020' },
+            { time: '17:45', title: '銀座線', type: ItemType.Transport, note: '轉乘至田園町', duration: '約20分', price: '¥330' },
+            { time: '18:00', title: '浅草寺', type: ItemType.Spot, location: '淺草寺', note: '夜訪' },
+            { time: 'Dinner', title: '浅草今半 国際通り本店', type: ItemType.Food, note: '和牛壽喜燒' },
+            { time: 'Stay', title: 'アパホテル〈浅草 田原町駅前〉', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '大黒家天麩羅', note: '天丼', type: 'dinner', category: '天婦羅' },
+            { name: '梅園 浅草本店', note: '日式甜點', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/22',
+          dayLabel: 'Day 10',
+          city: '方案A: 河口湖 / 方案B: 東京市區',
+          weather: { temp: '5°C', condition: '晴時多雲', icon: 'fa-cloud-sun', location: '河口湖' },
+          items: [
+            // Plan A Items
+            { time: '07:30', title: '銀座線+JR', type: ItemType.Transport, plan: 'A', note: '淺草 ➔ 新宿' },
+            { time: '08:10', title: '高速バス', type: ItemType.Transport, plan: 'A', note: '新宿 ➔ 河口湖', duration: '約2小時', price: '¥1,900' },
+            { time: '10:30', title: '河口湖遊覧船', type: ItemType.Spot, plan: 'A', location: '河口湖遊覽船', price: '¥1,000' },
+            { time: '11:30', title: '富士山パノラマロープウェイ', type: ItemType.Spot, plan: 'A', location: '富士山全景纜車', price: '¥900' },
+            { time: 'Lunch', title: 'ほうとう不動 河口湖北本店', type: ItemType.Food, plan: 'A', note: '味噌燉麵', location: 'ほうとう不動 河口湖北本店' },
+            { time: '14:00', title: '河口湖音楽と森の美術館', type: ItemType.Spot, plan: 'A', note: '歐式庭園' },
+            { time: '14:00', title: '富士山五合目', type: ItemType.Spot, plan: 'A', note: '備案: 若天氣好可前往' },
+            { time: 'Dinner', title: '湖波', type: ItemType.Food, plan: 'A', note: '日式定食', location: '湖波' },
+
+            // Plan B Items
+            { time: '09:00', title: '浅草寺・雷門', type: ItemType.Spot, plan: 'B', location: '淺草寺' },
+            { time: 'Lunch', title: '大黒家天麩羅', type: ItemType.Food, plan: 'B', location: '大黑家天婦羅' },
+            { time: '16:00', title: '六本木ヒルズ展望台', type: ItemType.Spot, plan: 'B', note: '室內觀景' },
+            { time: '16:00', title: '東京駅・日本橋・銀座', type: ItemType.Spot, plan: 'B', note: '市區逛街' },
+            { time: 'Dinner', title: '一蘭 浅草店', type: ItemType.Food, plan: 'B' },
+
+            // Common Items
+            { time: 'Stay', title: 'アパホテル〈浅草 田原町駅前〉', type: ItemType.Hotel }
+          ],
+          backupDining: [
+            { name: '叙々苑', note: '敘敘苑燒肉', type: 'dinner', category: '燒肉' },
+            { name: '俺の焼肉', note: '俺的燒肉', type: 'dinner', category: '燒肉' },
+            { name: 'Harajuku Sweets Lab', note: '甜點', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/23',
+          dayLabel: 'Day 11',
+          city: '東京 ➔ 川越',
+          weather: { temp: '9°C', condition: '晴朗', icon: 'fa-sun', location: '川越' },
+          items: [
+            { time: '08:30', title: '浅草 ➔ 川越', type: ItemType.Transport, note: '東武或JR線', duration: '約1小時' },
+            { time: '10:00', title: '蔵造りの町並み', type: ItemType.Spot, location: '川越時之鐘' },
+            { time: '11:00', title: '菓子屋横丁', type: ItemType.Spot, note: '傳統糖果' },
+            { time: '13:30', title: '川越氷川神社', type: ItemType.Spot, note: '釣鯛魚籤' },
+            { time: 'Lunch', title: '小川菊', type: ItemType.Food, note: '鰻魚飯' },
+            { time: 'Dinner', title: '浅草名代らーめん 与ろゐ屋', type: ItemType.Food, note: '拉麵' },
+            { time: 'Stay', title: 'アパホテル〈浅草 田原町駅前〉', type: ItemType.Hotel }
+          ],
+          backupDining: [
+             { name: '川越プリン', note: '川越布丁', type: 'dessert', category: '甜點' },
+             { name: '小江戸おさつ庵', note: '炸地瓜片', type: 'dessert', category: '甜點' }
+          ]
+        },
+        {
+          date: '2026/01/24',
+          dayLabel: 'Day 12',
+          city: '東京 ➔ 機場',
+          weather: { temp: '10°C', condition: '晴朗', icon: 'fa-sun', location: '東京' },
+          items: [
+            { time: '09:00', title: '浅草寺・仲見世', type: ItemType.Spot, note: '最後採買' },
+            { time: '10:30', title: 'ドン・キホーテ', type: ItemType.Spot },
+            { time: '11:30', title: '京成スカイライナー', type: ItemType.Transport, isImportant: true, note: '淺草 ➔ 成田機場', duration: '約1小時30分', price: '¥2,700' },
+            { time: '14:35', title: 'CI101 飛往台北', type: ItemType.Flight }
+          ],
+          backupDining: [
+             { name: '人形焼', note: '人形燒', type: 'dessert', category: '伴手禮' }
+          ]
+        }
+      ];
+
+      const packingList = [
+        // MOST IMPORTANT
+        { id: '1-1', text: '護照', category: 'Most Important', checked: false },
+        { id: '1-2', text: '國際駕照', category: 'Most Important', checked: false },
+        { id: '1-3', text: '國際駕照譯本', category: 'Most Important', checked: false },
+        { id: '1-4', text: '機票', category: 'Most Important', checked: false },
+        { id: '1-5', text: '簽證 (Visit Japan)', category: 'Most Important', checked: false },
+        { id: '1-6', text: '錢包 (現金/提款卡)', category: 'Most Important', checked: false },
+        { id: '1-7', text: '手機', category: 'Most Important', checked: false },
+        { id: '1-8', text: '鑰匙', category: 'Most Important', checked: false },
+        { id: '1-9', text: '飯店預約單', category: 'Most Important', checked: false },
+        { id: '1-10', text: '機票證明', category: 'Most Important', checked: false },
+        { id: '1-11', text: '網卡 / Esim', category: 'Most Important', checked: false },
+
+        // Clothing (Check Weather)
+        { id: '2-1', text: '上衣', category: 'Clothing', checked: false },
+        { id: '2-2', text: '褲子', category: 'Clothing', checked: false },
+        { id: '2-3', text: '外套', category: 'Clothing', checked: false },
+        { id: '2-4', text: '厚外套', category: 'Clothing', checked: false },
+        { id: '2-5', text: '內衣', category: 'Clothing', checked: false },
+        { id: '2-6', text: '內褲', category: 'Clothing', checked: false },
+        { id: '2-7', text: '睡衣睡褲', category: 'Clothing', checked: false },
+        { id: '2-8', text: '襪子', category: 'Clothing', checked: false },
+        { id: '2-9', text: '鞋子', category: 'Clothing', checked: false },
+        { id: '2-10', text: '拖鞋', category: 'Clothing', checked: false },
+        { id: '2-11', text: '帽子', category: 'Clothing', checked: false },
+        { id: '2-12', text: '圍巾', category: 'Clothing', checked: false },
+
+        // Electronics
+        { id: '3-1', text: '行動電源', category: 'Electronics', checked: false },
+        { id: '3-2', text: 'Type-C 充電線', category: 'Electronics', checked: false },
+        { id: '3-3', text: 'Lightning 充電線', category: 'Electronics', checked: false },
+        { id: '3-4', text: '手錶充電器', category: 'Electronics', checked: false },
+        { id: '3-5', text: '快充頭', category: 'Electronics', checked: false },
+        { id: '3-6', text: '耳機', category: 'Electronics', checked: false },
+        { id: '3-7', text: '萬用插頭', category: 'Electronics', checked: false },
+        { id: '3-8', text: '變壓器', category: 'Electronics', checked: false },
+        { id: '3-9', text: 'iPad / 筆電', category: 'Electronics', checked: false },
+
+        // Toiletries
+        { id: '4-1', text: '牙刷', category: 'Toiletries', checked: false },
+        { id: '4-2', text: '牙膏', category: 'Toiletries', checked: false },
+        { id: '4-3', text: '洗面乳', category: 'Toiletries', checked: false },
+        { id: '4-4', text: '棉花棒', category: 'Toiletries', checked: false },
+        { id: '4-5', text: '衛生棉', category: 'Toiletries', checked: false },
+        { id: '4-6', text: '刮鬍刀', category: 'Toiletries', checked: false },
+        { id: '4-7', text: '梳子', category: 'Toiletries', checked: false },
+
+        // Others
+        { id: '5-1', text: '眼鏡', category: 'Others', checked: false },
+        { id: '5-2', text: '太陽眼鏡', category: 'Others', checked: false },
+        { id: '5-3', text: '眼鏡盒', category: 'Others', checked: false },
+        { id: '5-4', text: '水壺', category: 'Others', checked: false },
+        { id: '5-5', text: '筆', category: 'Others', checked: false },
+        { id: '5-6', text: '錶帶', category: 'Others', checked: false },
+        { id: '5-7', text: '手機殼', category: 'Others', checked: false },
+        { id: '5-8', text: '卡針', category: 'Others', checked: false },
+        { id: '5-9', text: '暖暖包', category: 'Others', checked: false },
+        { id: '5-10', text: '行李秤', category: 'Others', checked: false },
+        { id: '5-11', text: '雨傘', category: 'Others', checked: false },
+
+        // Ski Gear
+        { id: '6-1', text: '雪鏡', category: 'Ski Gear', checked: false },
+        { id: '6-2', text: '面罩', category: 'Ski Gear', checked: false },
+        { id: '6-3', text: '透氣內衣', category: 'Ski Gear', checked: false },
+        { id: '6-4', text: '羽絨外套', category: 'Ski Gear', checked: false },
+        { id: '6-5', text: '發熱衣', category: 'Ski Gear', checked: false },
+        { id: '6-6', text: '雪褲', category: 'Ski Gear', checked: false },
+        { id: '6-7', text: '厚襪子', category: 'Ski Gear', checked: false },
+        { id: '6-8', text: '手套', category: 'Ski Gear', checked: false },
+
+        // Tim's Camera Gear
+        { id: '7-1', text: '相機', category: "Tim's Camera", checked: false },
+        { id: '7-2', text: '相機電池', category: "Tim's Camera", checked: false },
+        { id: '7-3', text: '鏡頭', category: "Tim's Camera", checked: false },
+        { id: '7-4', text: '記憶卡', category: "Tim's Camera", checked: false },
+        { id: '7-5', text: '相機充電器', category: "Tim's Camera", checked: false },
+        { id: '7-6', text: '小腳架', category: "Tim's Camera", checked: false },
+        { id: '7-7', text: '大腳架', category: "Tim's Camera", checked: false },
+        { id: '7-8', text: '怪手 / 吸盤', category: "Tim's Camera", checked: false },
+        { id: '7-9', text: '玻璃遮光罩', category: "Tim's Camera", checked: false },
+        { id: '7-10', text: 'GO ULTRA', category: "Tim's Camera", checked: false },
+        { id: '7-11', text: '配件 & 工具', category: "Tim's Camera", checked: false },
+
+        // Anna's Cosmetics
+        { id: '8-1', text: '防曬乳', category: "Anna's Cosmetics", checked: false },
+        { id: '8-2', text: '護唇膏', category: "Anna's Cosmetics", checked: false },
+        { id: '8-3', text: '化妝品', category: "Anna's Cosmetics", checked: false },
+        { id: '8-4', text: '卸妝用品', category: "Anna's Cosmetics", checked: false },
+        { id: '8-5', text: '乳液/護手霜', category: "Anna's Cosmetics", checked: false },
+        { id: '8-6', text: '臉部保養品', category: "Anna's Cosmetics", checked: false },
+        { id: '8-7', text: '隱形眼鏡', category: "Anna's Cosmetics", checked: false },
+        { id: '8-8', text: '香水', category: "Anna's Cosmetics", checked: false },
+        { id: '8-9', text: '飾品', category: "Anna's Cosmetics", checked: false },
+        { id: '8-10', text: '拔毛夾', category: "Anna's Cosmetics", checked: false },
+      ];
+
+      // --- GEMINI SERVICE ---
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+      async function getSpotInfo(spotName) {
+        try {
+          const prompt = `
+            Tell me a short, fascinating story, historical fact, or a "secret tip" about ${spotName} in Japan.
+            Target audience: A traveler from Taiwan.
+            Language: Traditional Chinese (Taiwan).
+            Keep it under 150 words. Be engaging and magazine-style.
+          `;
+
+          const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+          });
+
+          return response.text || "目前無法取得資訊，請稍後再試。";
+        } catch (error) {
+          console.error("Gemini API Error:", error);
+          return "AI 導遊目前休息中，請檢查網路連線。";
+        }
+      }
+
+      // --- COMPONENT: AI Modal ---
+      const AIModal = ({ isOpen, onClose, title, content, isLoading }) => {
+        if (!isOpen) return null;
+
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+            <div className="glass-panel w-full max-w-md shadow-2xl overflow-hidden relative border border-white/20 bg-black/40">
+              
+              {/* Header */}
+              <div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 p-5 flex justify-between items-center border-b border-white/10 backdrop-blur-md">
+                <h3 className="text-xl font-bold text-white flex items-center gap-3 drop-shadow-md">
+                  <i className="fa-solid fa-wand-magic-sparkles text-purple-300"></i>
+                  {title}
+                </h3>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white transition-all">
+                  <i className="fa-solid fa-xmark text-lg"></i>
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-8 text-white/90 leading-relaxed min-h-[150px] relative">
+                 {/* Decorative bg element */}
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-purple-500/10 blur-[60px] rounded-full pointer-events-none"></div>
+
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full gap-4 py-8">
+                    <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-400 rounded-full animate-spin"></div>
+                    <p className="text-white/60 text-sm font-medium animate-pulse">AI 導遊正在翻閱歷史書籍...</p>
+                  </div>
+                ) : (
+                  <div className="prose prose-invert prose-sm relative z-10">
+                     {content}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="p-5 bg-black/20 flex justify-end border-t border-white/5">
+                 <button 
+                   onClick={onClose}
+                   className="glass-button px-6 py-2.5 rounded-xl text-sm font-bold text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg"
+                 >
+                   關閉
+                 </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // --- COMPONENT: TabButton ---
+      const TabButton = ({ active, icon, label, onClick }) => (
+        <button
+          onClick={onClick}
+          className="flex flex-col items-center justify-center w-full relative group h-full"
+        >
+          {/* Active Glow Background: Reduced height to fit new nav bar */}
+          <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60px] h-[48px] rounded-[24px] transition-all duration-500 ease-out ${active ? 'bg-white/15 opacity-100 scale-100' : 'bg-transparent opacity-0 scale-75'}`}></div>
+          
+          {/* Icon: Scaled 30% up */}
+          <i className={`${icon} text-xl mb-1 relative z-10 transition-all duration-300 scale-[1.3] origin-center ${active ? 'text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] -translate-y-0.5' : 'text-white/40 group-hover:text-white/60'}`}></i>
+          
+          {/* Label: Size unchanged */}
+          <span className={`text-[10px] font-bold tracking-wide relative z-10 transition-all duration-300 ${active ? 'text-white' : 'text-white/40'}`}>{label}</span>
+        </button>
+      );
+
+      // --- COMPONENT: SectionHeader ---
+      const SectionHeader = ({ title, icon, action }) => (
+        <div className="flex items-center justify-between mb-6 px-2 animate-fade-in">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+              <i className={`${icon} text-lg bg-clip-text text-transparent bg-gradient-to-br from-white to-white/70`}></i>
+            </div>
+            <h2 className="text-2xl font-bold text-glass-primary tracking-tight drop-shadow-sm">{title}</h2>
+          </div>
+          {action && <div>{action}</div>}
+        </div>
+      );
+
+      // --- COMPONENT: FlightCard ---
+      const FlightCard = ({ flight }) => (
+        <div className="glass-panel p-6 mb-5 relative group overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:border-white/30 hover:shadow-[0_20px_50px_-12px_rgba(255,255,255,0.15)] cursor-default">
+          {/* Decorative sheen */}
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors"></div>
+          
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <span className="inline-block px-3 py-1 rounded-lg bg-white/10 border border-white/20 backdrop-blur-md text-white text-xs font-bold shadow-sm group-hover:bg-white/20 transition-colors">
+                  {flight.airline}
+                </span>
+                <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/70 mt-3 drop-shadow-lg tracking-tight font-sans">
+                  {flight.number}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-glass-secondary text-sm font-semibold tracking-wide">{flight.date}</div>
+                <div className="text-xs text-emerald-300 mt-1 font-bold flex items-center justify-end gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 w-fit ml-auto">
+                  <i className="fa-solid fa-suitcase"></i> {flight.baggage}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between text-sm bg-black/5 rounded-2xl p-5 backdrop-blur-sm border border-white/10 shadow-inner relative overflow-hidden group-hover:bg-black/10 transition-colors duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 animate-pulse-slow"></div>
+              <div className="text-center z-10">
+                 <div className="text-2xl font-bold text-white">{flight.route.split('➔')[0].trim()}</div>
+                 <div className="text-white/40 text-xs mt-1 font-medium">{flight.terminal.split('/')[0]}</div>
+              </div>
+              <div className="flex-1 px-6 flex flex-col items-center z-10">
+                <div className="text-xs text-glass-secondary mb-2 font-mono">{flight.time}</div>
+                <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent relative">
+                   <i className="fa-solid fa-plane text-sm text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-transform"></i>
+                </div>
+              </div>
+              <div className="text-center z-10">
+                 <div className="text-2xl font-bold text-white">{flight.route.split('➔')[1].trim()}</div>
+                 <div className="text-white/40 text-xs mt-1 font-medium">{flight.terminal.split('/')[1]}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+      // --- COMPONENT: ItineraryCard ---
+      const ItineraryCard = ({ item, onAskAI }) => {
+        let iconClass = 'fa-solid fa-location-dot';
+        let colorClass = 'text-cyan-300'; 
+        let bgGradient = 'from-cyan-500/20 to-blue-500/5';
+        
+        if (item.type === ItemType.Food) {
+          iconClass = 'fa-solid fa-utensils';
+          colorClass = 'text-orange-300';
+          bgGradient = 'from-orange-500/20 to-red-500/5';
+        } else if (item.type === ItemType.Transport) {
+          iconClass = 'fa-solid fa-train-subway';
+          colorClass = 'text-emerald-300';
+          bgGradient = 'from-emerald-500/20 to-teal-500/5';
+        } else if (item.type === ItemType.Hotel) {
+          iconClass = 'fa-solid fa-bed';
+          colorClass = 'text-indigo-300';
+          bgGradient = 'from-indigo-500/20 to-violet-500/5';
+        } else if (item.type === ItemType.Flight) {
+          iconClass = 'fa-solid fa-plane-departure';
+          colorClass = 'text-rose-300';
+          bgGradient = 'from-rose-500/20 to-pink-500/5';
+        }
+
+        const showMap = item.type === ItemType.Spot || item.type === ItemType.Food || item.type === ItemType.Hotel;
+        const showAI = item.type === ItemType.Spot;
+
+        // Unified styling with Checklist panel: glass-panel
+        const panelClass = 'glass-panel p-5 hover:bg-white/10 transition-all duration-300 group overflow-hidden border border-white/10';
+
+        return (
+          <div className={`relative pl-8 pb-8 border-l-2 ${item.isImportant ? 'border-cyan-400/50' : 'border-white/10'} last:border-0`}>
+            <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-all duration-300 ${item.isImportant ? 'bg-cyan-400 shadow-cyan-400/50 scale-110' : 'bg-white/10 backdrop-blur-md'}`}></div>
+            
+            <div className={panelClass}>
+              {/* Subtle background gradient hint */}
+              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${bgGradient} blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full -translate-y-10 translate-x-10`}></div>
+              
+              <div className="relative z-10">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className={`text-xs font-bold font-mono px-2 py-1 rounded-md backdrop-blur-md border border-white/10 ${item.isImportant ? 'bg-cyan-500/20 text-cyan-200 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'bg-white/5 text-white/50'}`}>
+                        {item.time}
+                    </span>
+                    {item.duration && (
+                      <span className="text-xs text-purple-300 font-bold bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20 shadow-sm">
+                        <i className="fa-regular fa-clock mr-1 text-[10px]"></i>{item.duration}
+                      </span>
+                    )}
+                    {item.price && (
+                      <span className="text-xs text-yellow-300 font-bold bg-yellow-500/10 px-2 py-0.5 rounded-full border border-yellow-500/20 shadow-sm ml-auto">
+                        {item.price}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <h4 className="font-bold text-glass-primary text-lg flex items-start gap-3 drop-shadow-md mt-2">
+                   <div className={`mt-1 p-1.5 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm shadow-inner shrink-0`}>
+                      <i className={`${iconClass} ${colorClass} text-sm filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]`}></i>
+                   </div>
+                   {item.title}
+                  </h4>
+                  
+                  {item.note && (
+                  <p className="text-glass-secondary text-sm mt-3 leading-relaxed pl-1">
+                      {item.note}
+                  </p>
+                  )}
+
+                  {(showMap || showAI) && (
+                  <div className="flex flex-wrap gap-3 mt-5">
+                      {showMap && (
+                      <a 
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location || item.title)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="glass-button px-4 py-2 rounded-xl text-xs font-bold text-white/90 hover:text-white flex items-center gap-2"
+                      >
+                          <i className="fa-solid fa-map-location-dot text-emerald-300 drop-shadow"></i> 地圖
+                      </a>
+                      )}
+                      
+                      {showAI && (
+                      <button
+                          onClick={() => onAskAI(item.location || item.title)}
+                          className="glass-button px-4 py-2 rounded-xl text-xs font-bold text-white/90 hover:text-white flex items-center gap-2 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-indigo-500/30"
+                      >
+                          <i className="fa-solid fa-wand-magic-sparkles text-purple-300 drop-shadow-[0_0_5px_rgba(216,180,254,0.6)]"></i> AI 導遊
+                      </button>
+                      )}
+                  </div>
+                  )}
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // --- Main App ---
+
+      export default function App() {
+        const [activeTab, setActiveTab] = useState('home');
+        const [checklist, setChecklist] = useState(packingList);
+        const [itinerary, setItinerary] = useState(itineraryData);
+        const [isEditing, setIsEditing] = useState(false);
+        const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+        const [daysRemaining, setDaysRemaining] = useState(0);
+        const [theme, setTheme] = useState('dark');
+        const [day10Plan, setDay10Plan] = useState('A');
+        
+        // AI Modal State
+        const [modalOpen, setModalOpen] = useState(false);
+        const [aiTitle, setAiTitle] = useState('');
+        const [aiContent, setAiContent] = useState('');
+        const [aiLoading, setAiLoading] = useState(false);
+
+        // Nav Visibility
+        const [isNavVisible, setIsNavVisible] = useState(true);
+        const lastScrollY = useRef(0);
+
+        // Scroll ref for horizontal itinerary strip
+        const dateStripRef = useRef(null);
+
+        // Backup type translation
+        const typeMap = {
+          lunch: '午餐',
+          dinner: '晚餐',
+          dessert: '甜點',
+          cafe: '咖啡廳'
+        };
+
+        useEffect(() => {
+          const savedTheme = localStorage.getItem('tohoku_theme');
+          if (savedTheme) {
+            setTheme(savedTheme);
+            document.documentElement.classList.remove('dark', 'light');
+            document.documentElement.classList.add(savedTheme);
+          } else {
+             document.documentElement.classList.add('dark');
+          }
+
+          const savedChecklist = localStorage.getItem('tohoku_checklist_v2');
+          if (savedChecklist) {
+            setChecklist(JSON.parse(savedChecklist));
+          }
+          
+          const savedItinerary = localStorage.getItem('tohoku_itinerary_v1');
+          if (savedItinerary) {
+              setItinerary(JSON.parse(savedItinerary));
+          }
+
+          const targetDate = new Date('2026-01-12T00:00:00');
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const diffTime = targetDate.getTime() - today.getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          setDaysRemaining(diffDays > 0 ? diffDays : 0);
+
+          const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+              // Scrolling Down
+              setIsNavVisible(false);
+            } else {
+              // Scrolling Up
+              setIsNavVisible(true);
+            }
+            lastScrollY.current = currentScrollY;
+          };
+
+          window.addEventListener('scroll', handleScroll, { passive: true });
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        useEffect(() => {
+          localStorage.setItem('tohoku_checklist_v2', JSON.stringify(checklist));
+        }, [checklist]);
+
+        useEffect(() => {
+          localStorage.setItem('tohoku_itinerary_v1', JSON.stringify(itinerary));
+        }, [itinerary]);
+
+        // Scroll active day into view when selected
+        useEffect(() => {
+          if (dateStripRef.current) {
+              const container = dateStripRef.current;
+              const activeBtn = container.children[selectedDayIndex];
+              
+              if (activeBtn) {
+                  const scrollLeft = activeBtn.offsetLeft - (container.clientWidth / 2) + (activeBtn.clientWidth / 2);
+                  container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+              }
+          }
+        }, [selectedDayIndex]);
+
+        const toggleTheme = () => {
+          const newTheme = theme === 'dark' ? 'light' : 'dark';
+          setTheme(newTheme);
+          localStorage.setItem('tohoku_theme', newTheme);
+          document.documentElement.classList.remove('dark', 'light');
+          document.documentElement.classList.add(newTheme);
+        };
+
+        const toggleCheck = (id) => {
+          setChecklist(prev => prev.map(item => 
+            item.id === id ? { ...item, checked: !item.checked } : item
+          ));
+        };
+
+        const handleAskAI = async (spotName) => {
+          setAiTitle(spotName);
+          setAiContent('');
+          setAiLoading(true);
+          setModalOpen(true);
+          
+          const result = await getSpotInfo(spotName);
+          setAiContent(result);
+          setAiLoading(false);
+        };
+
+        const moveItem = (dayIndex, itemToMove, direction) => {
+          const newItinerary = [...itinerary];
+          const dayItems = newItinerary[dayIndex].items;
+          
+          const currentIndex = dayItems.indexOf(itemToMove);
+          if (currentIndex === -1) return;
+
+          let targetIndex = -1;
+          if (direction === 'up') {
+              for (let i = currentIndex - 1; i >= 0; i--) {
+                  if (!dayItems[i].plan || dayItems[i].plan === itemToMove.plan || !itemToMove.plan) {
+                      targetIndex = i;
+                      break;
+                  }
+              }
+          } else {
+              for (let i = currentIndex + 1; i < dayItems.length; i++) {
+                   if (!dayItems[i].plan || dayItems[i].plan === itemToMove.plan || !itemToMove.plan) {
+                      targetIndex = i;
+                      break;
+                  }
+              }
+          }
+
+          if (targetIndex !== -1) {
+              [dayItems[currentIndex], dayItems[targetIndex]] = [dayItems[targetIndex], dayItems[currentIndex]];
+              setItinerary(newItinerary);
+          }
+        };
+
+        const updateTime = (dayIndex, itemToUpdate, newTime) => {
+            const newItinerary = [...itinerary];
+            const item = newItinerary[dayIndex].items.find(i => i === itemToUpdate);
+            if (item) {
+                item.time = newTime;
+                setItinerary(newItinerary);
+            }
+        };
+
+        const renderHome = () => (
+          <div className="space-y-6 pb-24 animate-fade-in">
+             {/* Removed Weather Glass Widget */}
+
+             {/* Countdown Glass */}
+             <div className="glass-panel p-6 flex justify-between items-center relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-2">
+                     <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-pulse"></div>
+                     <span className="text-glass-secondary text-[10px] uppercase tracking-widest font-bold">Departure</span>
+                  </div>
+                  <div className="text-glass-primary font-bold text-xl drop-shadow-md">2026.01.12</div>
+                </div>
+                <div className="relative z-10 flex flex-col items-end">
+                   <div className="flex items-baseline gap-1 text-transparent bg-clip-text bg-gradient-to-b from-emerald-200 to-emerald-500 drop-shadow-sm">
+                      <span className="text-6xl font-black tracking-tighter">{daysRemaining}</span>
+                      <span className="text-sm font-bold opacity-80 mb-2">DAYS</span>
+                   </div>
+                </div>
+             </div>
+
+             {/* Flights */}
+             <div>
+               <SectionHeader title="航班資訊" icon="fa-solid fa-plane-up" />
+               {flights.map((f, i) => <FlightCard key={i} flight={f} />)}
+             </div>
+
+             {/* Glass Tiles */}
+             <div className="grid grid-cols-2 gap-4">
+                <button onClick={() => setActiveTab('itinerary')} className="glass-panel p-6 hover:bg-white/10 transition-all duration-300 text-left group relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/20 blur-2xl rounded-full group-hover:bg-blue-500/30 transition-colors"></div>
+                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400/20 to-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 border border-white/10 shadow-[0_4px_10px_rgba(0,0,0,0.1)] backdrop-blur-md">
+                      <i className="fa-solid fa-map text-blue-200 text-2xl drop-shadow"></i>
+                   </div>
+                   <span className="text-glass-primary font-bold block text-lg relative z-10">查看行程</span>
+                   <p className="text-glass-secondary text-xs mt-1 relative z-10 font-medium">12 Days Plan</p>
+                </button>
+                <button onClick={() => setActiveTab('checklist')} className="glass-panel p-6 hover:bg-white/10 transition-all duration-300 text-left group relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/20 blur-2xl rounded-full group-hover:bg-emerald-500/30 transition-colors"></div>
+                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-teal-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 border border-white/10 shadow-[0_4px_10px_rgba(0,0,0,0.1)] backdrop-blur-md">
+                      <i className="fa-solid fa-suitcase text-emerald-200 text-2xl drop-shadow"></i>
+                   </div>
+                   <span className="text-glass-primary font-bold block text-lg relative z-10">行李清單</span>
+                   <p className="text-glass-secondary text-xs mt-1 relative z-10 font-medium">Checklist</p>
+                </button>
+             </div>
+          </div>
+        );
+
+        const renderItinerary = () => {
+          const activeDay = itinerary[selectedDayIndex];
+          const hasPlans = activeDay.items.some(i => i.plan);
+
+          return (
+            <div className="pb-28 animate-fade-in">
+              {/* Header with Edit Toggle */}
+              <SectionHeader 
+                  title="每日行程" 
+                  icon="fa-regular fa-calendar-days" 
+                  action={
+                      <button 
+                          onClick={() => setIsEditing(!isEditing)}
+                          className={`text-xs font-bold px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all ${isEditing ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 shadow-[0_0_10px_rgba(244,63,94,0.3)]' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'}`}
+                      >
+                          {isEditing ? <><i className="fa-solid fa-check mr-1"></i> 完成</> : <><i className="fa-solid fa-pen mr-1"></i> 編輯</>}
+                      </button>
+                  }
+              />
+
+              {/* Horizontal Date Strip - Sticky Wrapper */}
+              <div className="sticky top-[68px] z-30 pb-4 pt-2 -mx-5 px-5 bg-black/40 backdrop-blur-xl border-b border-white/5 shadow-sm mb-6 transition-all duration-300">
+                  <div 
+                    ref={dateStripRef}
+                    className="flex overflow-x-auto no-scrollbar gap-3 px-1 snap-x"
+                  >
+                    {itinerary.map((day, idx) => {
+                      const isSelected = selectedDayIndex === idx;
+                      
+                      // Visual style for Day Badges in the Strip - Unified Red for all days
+                      const activeGradient = 'bg-gradient-to-br from-rose-500 to-red-600 shadow-rose-500/40';
+
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => setSelectedDayIndex(idx)}
+                          className={`snap-center shrink-0 rounded-2xl p-3 min-w-[70px] flex flex-col items-center justify-center border transition-all duration-300 ${isSelected ? `${activeGradient} border-white/20 text-white scale-105 shadow-lg` : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'}`}
+                        >
+                          <span className="text-[9px] font-black uppercase tracking-widest opacity-80">{day.dayLabel}</span>
+                          <span className="text-xl font-bold leading-tight mt-0.5">{day.date.split('/')[2]}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+              </div>
+
+              {/* Content Area for Selected Day */}
+              <div className="animate-fade-in">
+                 {/* City Header & Weather */}
+                 <div className="mb-6 px-2">
+                   <h3 className="text-2xl font-bold text-white drop-shadow-md">{activeDay.city}</h3>
+                   <p className="text-sm font-mono text-white/60 mt-1 mb-4">{activeDay.date}</p>
+                   
+                   {/* Weather Card */}
+                   {activeDay.weather && (
+                     <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md relative overflow-hidden">
+                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent"></div>
+                       <div className="relative w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-200 border border-white/10 shadow-inner">
+                         <i className={`fa-solid ${activeDay.weather.icon} text-xl drop-shadow`}></i>
+                       </div>
+                       <div className="relative">
+                         <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mb-0.5">
+                           {activeDay.weather.location} • Weather
+                         </div>
+                         <div className="flex items-baseline gap-2">
+                           <span className="text-2xl font-black text-white">{activeDay.weather.temp}</span>
+                           <span className="text-sm font-bold text-white/80">{activeDay.weather.condition}</span>
+                         </div>
+                       </div>
+                     </div>
+                   )}
+                 </div>
+
+                 {hasPlans && (
+                  <div className="flex p-1.5 bg-black/20 rounded-2xl mb-6 mx-1 border border-white/5 backdrop-blur-md shadow-inner relative overflow-hidden">
+                      <div className={`absolute top-1.5 bottom-1.5 rounded-xl bg-white/10 border border-white/10 shadow-lg backdrop-blur-md transition-all duration-300 w-[calc(50%-6px)] ${day10Plan === 'A' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}></div>
+                      <button 
+                      onClick={() => setDay10Plan('A')}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all relative z-10 ${day10Plan === 'A' ? 'text-cyan-200' : 'text-white/40 hover:text-white/70'}`}
+                      >
+                      方案 A: 河口湖
+                      </button>
+                      <button 
+                      onClick={() => setDay10Plan('B')}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all relative z-10 ${day10Plan === 'B' ? 'text-cyan-200' : 'text-white/40 hover:text-white/70'}`}
+                      >
+                      方案 B: 東京市區
+                      </button>
+                  </div>
+                 )}
+
+                 <div className="space-y-4">
+                    {activeDay.items
+                      .filter(item => !item.plan || item.plan === day10Plan)
+                      .map((item, idx) => (
+                        <div key={idx} className="transition-all duration-300">
+                            {isEditing ? (
+                                <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                                    <div className="flex flex-col gap-1">
+                                        <button 
+                                            onClick={() => moveItem(selectedDayIndex, item, 'up')}
+                                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors"
+                                        >
+                                            <i className="fa-solid fa-chevron-up text-xs"></i>
+                                        </button>
+                                        <button 
+                                            onClick={() => moveItem(selectedDayIndex, item, 'down')}
+                                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors"
+                                        >
+                                            <i className="fa-solid fa-chevron-down text-xs"></i>
+                                        </button>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <input 
+                                            type="text" 
+                                            value={item.time} 
+                                            onChange={(e) => updateTime(selectedDayIndex, item, e.target.value)}
+                                            className="w-full bg-black/20 border border-white/10 rounded-lg px-2 py-1 text-sm font-mono text-cyan-300 focus:outline-none focus:border-cyan-500 mb-1"
+                                        />
+                                        <div className="text-sm font-bold text-white/80 truncate">{item.title}</div>
+                                    </div>
+                                </div>
+                            ) : (
+                                // Itinerary Card now uses standardized glass-panel styling
+                                <ItineraryCard item={item} onAskAI={handleAskAI} />
+                            )}
+                        </div>
+                    ))}
+                 </div>
+
+                 {activeDay.backupDining.length > 0 && !isEditing && (
+                    <div className="mt-10 pt-8 border-t border-white/10 border-dashed relative">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/10 px-4 py-1.5 rounded-full border border-white/10 text-[10px] text-white/60 uppercase tracking-widest backdrop-blur-xl shadow-lg">
+                        Backup Options
+                      </div>
+                      <h5 className="text-xs font-bold text-glass-secondary mb-5 flex items-center gap-2 pl-2">
+                        <i className="fa-solid fa-utensils text-white/30"></i>
+                        候補美食 & 甜點
+                      </h5>
+                      <div className="grid grid-cols-1 gap-3">
+                        {activeDay.backupDining.map((food, fIdx) => (
+                          <div key={fIdx} className="glass-panel p-4 flex items-center justify-between hover:bg-white/15 transition-all group bg-white/5 border border-white/5 rounded-2xl">
+                              <div className="flex items-center gap-4">
+                                <div className={`w-3 h-3 rounded-full shadow-[0_0_8px] border border-white/20 ${food.type === 'dessert' ? 'bg-pink-400 shadow-pink-400/50' : 'bg-orange-400 shadow-orange-400/50'}`}></div>
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-2 mb-0.5">
+                                      <span className="text-glass-primary font-bold text-sm group-hover:translate-x-1 transition-transform">{food.name}</span>
+                                      {food.category && (
+                                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-white/70 whitespace-nowrap">
+                                              {food.category}
+                                          </span>
+                                      )}
+                                  </div>
+                                  <div className="flex items-center gap-2 text-[10px] text-glass-secondary">
+                                      <span className="uppercase tracking-wide font-bold text-white/50">{typeMap[food.type] || food.type}</span>
+                                      {food.note && <span className="text-white/30">•</span>}
+                                      {food.note && <span className="opacity-80">{food.note}</span>}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <a 
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(food.name + ' ' + activeDay.city)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-all border border-white/10 shadow-sm hover:shadow-md hover:scale-110"
+                              >
+                                <i className="fa-solid fa-map-location-dot text-sm"></i>
+                              </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+              </div>
+            </div>
+          );
+        };
+
+        const renderChecklist = () => {
+          const categories = Array.from(new Set(checklist.map(i => i.category)));
+          const progress = Math.round((checklist.filter(i => i.checked).length / checklist.length) * 100);
+
+          return (
+            <div className="pb-24 animate-fade-in">
+              <SectionHeader title="行前準備" icon="fa-solid fa-clipboard-check" />
+              
+              <div className="mb-8 glass-panel p-6 shadow-[0_10px_30px_rgba(0,0,0,0.2)] relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 blur-3xl rounded-full"></div>
+                
+                <div className="flex justify-between text-sm mb-4 relative z-10">
+                  <span className="text-glass-secondary font-bold tracking-wide">Packing Progress</span>
+                  <span className="text-cyan-300 font-black text-xl drop-shadow-sm">{progress}%</span>
+                </div>
+                
+                <div className="relative z-10 w-full bg-black/20 rounded-full h-4 overflow-hidden border border-white/5 shadow-inner backdrop-blur-sm">
+                  <div 
+                      className="h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(34,211,238,0.6)] relative overflow-hidden" 
+                      style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #22d3ee, #3b82f6)' }}
+                  >
+                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {categories.map(cat => (
+                  <div key={cat} className="glass-panel p-5 hover:bg-white/10 transition-colors duration-300">
+                    <h3 className="text-glass-primary font-bold text-xs uppercase tracking-[0.15em] mb-4 border-b border-white/10 pb-3 flex items-center gap-2 opacity-80">
+                       <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_white]"></div>
+                       {cat}
+                    </h3>
+                    <div className="space-y-2">
+                      {checklist.filter(i => i.category === cat).map(item => (
+                        <label key={item.id} className="flex items-center p-3.5 rounded-xl hover:bg-white/5 cursor-pointer transition-all group border border-transparent hover:border-white/5 active:scale-98">
+                          <div className="relative">
+                            <input 
+                              type="checkbox" 
+                              checked={item.checked} 
+                              onChange={() => toggleCheck(item.id)}
+                              className="peer appearance-none w-6 h-6 rounded-lg border border-white/30 checked:bg-gradient-to-br checked:from-cyan-400 checked:to-blue-500 checked:border-transparent transition-all bg-white/5 shadow-inner"
+                            />
+                            <i className="fa-solid fa-check text-xs text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity drop-shadow-sm scale-0 peer-checked:scale-100 duration-200"></i>
+                          </div>
+                          <span className={`ml-4 text-sm font-medium transition-all duration-300 ${item.checked ? 'text-white/20 line-through decoration-white/20' : 'text-glass-primary group-hover:text-white'}`}>
+                            {item.text}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        };
+
+        const renderInfo = () => (
+          <div className="pb-24 animate-fade-in">
+            <SectionHeader title="實用資訊" icon="fa-solid fa-circle-info" />
+            
+            <div className="space-y-5">
+              {/* Removed Theme Toggle */}
+
+              <div className="glass-panel p-6 relative overflow-hidden">
+                 <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-rose-500/10 blur-3xl rounded-full"></div>
+                 
+                 <h3 className="text-glass-primary font-bold mb-6 flex items-center gap-3 border-b border-white/10 pb-4 relative z-10">
+                   <div className="p-1.5 bg-rose-500/20 rounded-lg border border-rose-500/30">
+                      <i className="fa-solid fa-phone text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.5)] text-sm"></i>
+                   </div>
+                   緊急聯絡
+                 </h3>
+                 <div className="space-y-5 relative z-10">
+                    <div className="flex justify-between items-center group">
+                      <span className="text-glass-secondary font-medium group-hover:text-white transition-colors">警察局</span>
+                      <a href="tel:110" className="glass-button px-4 py-2 rounded-xl text-white font-mono font-bold text-lg hover:bg-rose-500/20 hover:border-rose-500/30 hover:text-rose-200">110</a>
+                    </div>
+                    <div className="flex justify-between items-center group">
+                      <span className="text-glass-secondary font-medium group-hover:text-white transition-colors">救護車/火警</span>
+                      <a href="tel:119" className="glass-button px-4 py-2 rounded-xl text-white font-mono font-bold text-lg hover:bg-rose-500/20 hover:border-rose-500/30 hover:text-rose-200">119</a>
+                    </div>
+                    <div className="flex justify-between items-center group">
+                      <span className="text-glass-secondary font-medium group-hover:text-white transition-colors">外交部旅外救助</span>
+                      <a href="tel:+81-3-3280-7111" className="glass-button px-4 py-2 rounded-xl text-white font-mono font-bold text-sm hover:bg-rose-500/20 hover:border-rose-500/30 hover:text-rose-200">+81-3-3280-7111</a>
+                    </div>
+                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {/* Removed Prohibited Items Link */}
+                
+                <a href="https://vjw-lp.digital.go.jp/zh-hant/" target="_blank" className="glass-panel p-5 flex items-center justify-between hover:bg-white/10 transition-all group active:scale-98">
+                   <span className="flex items-center gap-5">
+                     <div className="w-10 h-10 rounded-2xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30 shadow-lg">
+                       <i className="fa-solid fa-qrcode text-purple-300 drop-shadow"></i>
+                     </div>
+                     <span className="text-glass-primary font-bold text-lg">Visit Japan Web</span>
+                   </span>
+                   <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/20 transition-all">
+                      <i className="fa-solid fa-chevron-right text-white/50 group-hover:text-white text-xs"></i>
+                   </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+
+        return (
+          <div className="min-h-screen font-sans selection:bg-cyan-500/30 selection:text-white pb-32 overflow-x-hidden transition-colors duration-500">
+            {/* Header */}
+            <header className="sticky top-0 z-40 px-6 py-4 flex justify-between items-center transition-all duration-300">
+              <div className="absolute inset-0 bg-black/10 backdrop-blur-xl border-b border-white/5 shadow-sm"></div>
+              <h1 className="relative z-10 text-lg font-black tracking-tight text-glass-primary flex items-center gap-3 drop-shadow-md">
+                <div className="w-2.5 h-8 bg-gradient-to-b from-cyan-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(34,211,238,0.6)]"></div>
+                2026 日本東北之旅
+              </h1>
+              <div className="relative z-10 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner hover:bg-white/20 transition-colors cursor-pointer">
+                 <i className="fa-solid fa-user text-sm text-white/80"></i>
+              </div>
+            </header>
+
+            {/* Main Content */}
+            <main className="relative z-10 p-5 sm:p-6 max-w-md mx-auto sm:max-w-xl md:max-w-2xl">
+              {activeTab === 'home' && renderHome()}
+              {activeTab === 'itinerary' && renderItinerary()}
+              {activeTab === 'checklist' && renderChecklist()}
+              {activeTab === 'info' && renderInfo()}
+            </main>
+
+            {/* Floating Glass Bottom Navigation */}
+            <div 
+              className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[360px] transition-transform duration-300 ease-out ${isNavVisible ? 'translate-y-0' : 'translate-y-[150%]'}`}
+            >
+              {/* Rounded-full navigation, reduced blur (xl instead of 2xl) */}
+              <nav className="relative bg-black/40 backdrop-blur-xl border border-white/20 rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.5)] px-4 flex justify-between items-center overflow-hidden h-16">
+                {/* Highlight sheen on top of nav */}
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+                
+                <TabButton active={activeTab === 'home'} icon="fa-solid fa-house" label="首頁" onClick={() => setActiveTab('home')} />
+                <TabButton active={activeTab === 'itinerary'} icon="fa-regular fa-map" label="行程" onClick={() => setActiveTab('itinerary')} />
+                <TabButton active={activeTab === 'checklist'} icon="fa-solid fa-list-check" label="清單" onClick={() => setActiveTab('checklist')} />
+                <TabButton active={activeTab === 'info'} icon="fa-solid fa-circle-info" label="資訊" onClick={() => setActiveTab('info')} />
+              </nav>
+            </div>
+
+            <AIModal 
+              isOpen={modalOpen} 
+              onClose={() => setModalOpen(false)} 
+              title={aiTitle} 
+              content={aiContent} 
+              isLoading={aiLoading} 
+            />
+          </div>
+        );
+      }
+
+      // --- MOUNT ---
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        );
+      }
+    </script>
+  </body>
+</html>
